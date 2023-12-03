@@ -1,31 +1,31 @@
 ﻿# urri-my-second-game-AljazEferl
 
  # BingoBlitz game
- 
-# Tombola Bliss
 
-Dobrodošli v svetu Tombola Bliss, igre, ki združuje vznemirjenje tombole in razburljivost Bingo Blitza!
+
+Dobrodošli v svetu Tombola Blitz, igre, ki združuje vznemirjenje tombole in razburljivost Bingo Blitza!
 
 ## Vsebina
 - [Dinamika igre](#dinamika-igre)
-- [Mehanična stran igre](#mehanična-stran-igre)
+- [Mehannika igre](#mehanika-igre)
 - [Elementi igre](#elementi-igre)
 
 ## Dinamika igre
-Tombola Bliss ponuja izjemno dinamično izkušnjo, kjer se igralci potegujejo za privlačne nagrade. Igra temelji na klasični tomboli, kjer morate označiti številke na svoji kartici, vendar smo dodali pridih Bingo Blitza z različnimi igralnimi načini in posebnimi dogodki. Hitro tempo igre in raznolikost izzivov ohranjajo igralce zasvojene in vedno pripravljene na naslednji krog.
+Podaj se na preizkušnjo sreče in zadani  številke na listku, na voljo imaš 3 runde. Potegoval se boš med samo igro za različne power upe, ki bodo omogočile zmago, če neboš dovolj pozoren bo igre hitro konec.
 
-## Mehanična stran igre
-Vsak igralec prejme virtualno kartico s številkami. Medtem ko se vodi žrebanje, morajo igralci spremljati izžrebane številke in jih označiti na svoji kartici. Posebni bonusi in možnosti za povečanje dobitkov dodajajo še večjo stopnjo taktičnosti in zabave. Prilagodljive možnosti za prilagajanje izkušnje igralcev dodatno povečujejo mehaniko igre.
+## Mehanika igre
+Vsak igralec prejme virtualno kartico s številkami (največ 3). Medtem ko se vodi žrebanje, morajo igralci spremljati izžrebane številke in jih označiti na svoji kartici. Posebni bonusi in možnosti za povečanje dobitkov dodajajo še večjo stopnjo taktičnosti in zabave. Prilagodljive možnosti za prilagajanje izkušnje igralcev dodatno povečujejo mehaniko igre.
+Dotiki listka, Prikay kroglic, Utrip power upa.
 
 ## Elementi igre
 Tombola Bliss vključuje številne zanimive elemente, vključno z:
 
-- **Posebni dogodki:** Redni posebni dogodki, ki prinašajo edinstvene izzive in nagrade.
+- **Posebni dogodki:** Power upi
   
-- **Raznoliki igralni načini:** Izbirajte med različnimi igralnimi načini, ki prinašajo raznolikost in nepredvidljivost.
+- **Kroglice** Kroglice na katerih bo prikaz števil
 
-- **Socialna interakcija:** Povežite se s prijatelji, pošiljajte jim izzive in delite svoje dosežke.
+- **Listki:** Tabela s številkami
 
-- **Nagrade in napredovanje:** Z vsako zmago odklepajte nove nagrade, stopnje in značke.
+- **Figura igralca** 
 
-Združite srečo, spretnost in taktiko v Tombola Bliss, kjer se zabava nikoli ne konča!
+
