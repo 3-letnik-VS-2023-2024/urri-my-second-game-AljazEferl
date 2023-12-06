@@ -21,6 +21,8 @@ public class RegionNames {
     public static final String GREY = "grey";
 
     public static final String BLITZ = "bingoBlitz";
+    public static final String MAP = "map";
+    public static final String MAP1 = "map1";
 
 
 

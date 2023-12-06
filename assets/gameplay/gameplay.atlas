@@ -6,51 +6,37 @@ filter: Nearest, Nearest
 repeat: none
 background2
   rotate: false
-  xy: 2, 2
+  xy: 2, 681
   size: 981, 328
   orig: 981, 328
   offset: 0, 0
   index: -1
-background4
+lightPink
   rotate: false
-  xy: 2, 332
-  size: 843, 667
-  orig: 843, 667
+  xy: 685, 479
+  size: 214, 200
+  orig: 214, 200
   offset: 0, 0
   index: -1
-cell-empty
+map1
   rotate: false
-  xy: 847, 849
-  size: 150, 150
-  orig: 150, 150
+  xy: 2, 2
+  size: 681, 677
+  orig: 681, 677
   offset: 0, 0
   index: -1
-cell-o
+oLetter
   rotate: false
-  xy: 847, 697
-  size: 150, 150
-  orig: 150, 150
+  xy: 685, 39
+  size: 189, 215
+  orig: 189, 215
   offset: 0, 0
   index: -1
-cell-x
+red
   rotate: false
-  xy: 847, 545
-  size: 150, 150
-  orig: 150, 150
-  offset: 0, 0
-  index: -1
-key
-  rotate: false
-  xy: 847, 427
-  size: 37, 34
-  orig: 37, 34
-  offset: 0, 0
-  index: -1
-keyhole
-  rotate: false
-  xy: 847, 463
-  size: 80, 80
-  orig: 80, 80
+  xy: 685, 256
+  size: 211, 221
+  orig: 211, 221
   offset: 0, 0
   index: -1
 
@@ -59,46 +45,88 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+bLetter
+  rotate: false
+  xy: 397, 586
+  size: 206, 210
+  orig: 206, 210
+  offset: 0, 0
+  index: -1
+background1
+  rotate: false
+  xy: 2, 305
+  size: 785, 277
+  orig: 785, 277
+  offset: 0, 0
+  index: -1
 background3
   rotate: false
-  xy: 2, 37
+  xy: 2, 2
   size: 785, 301
   orig: 785, 301
   offset: 0, 0
   index: -1
+dBlue
+  rotate: false
+  xy: 210, 799
+  size: 201, 198
+  orig: 201, 198
+  offset: 0, 0
+  index: -1
 dPink
   rotate: false
-  xy: 789, 2
+  xy: 605, 584
   size: 210, 211
   orig: 210, 211
   offset: 0, 0
   index: -1
-lightPink
+gLetter
   rotate: false
-  xy: 804, 215
-  size: 214, 200
-  orig: 214, 200
+  xy: 603, 798
+  size: 200, 199
+  orig: 200, 199
   offset: 0, 0
   index: -1
-menu-background
+green
   rotate: false
-  xy: 804, 640
-  size: 200, 300
-  orig: 200, 300
+  xy: 2, 601
+  size: 198, 203
+  orig: 198, 203
   offset: 0, 0
   index: -1
-red
+iLetter
   rotate: false
-  xy: 804, 417
-  size: 211, 221
-  orig: 211, 221
+  xy: 413, 799
+  size: 188, 198
+  orig: 188, 198
   offset: 0, 0
   index: -1
-simple-background
+lightBlue
   rotate: false
-  xy: 2, 340
-  size: 800, 600
-  orig: 800, 600
+  xy: 805, 797
+  size: 197, 200
+  orig: 197, 200
+  offset: 0, 0
+  index: -1
+nLetter
+  rotate: false
+  xy: 202, 589
+  size: 193, 208
+  orig: 193, 208
+  offset: 0, 0
+  index: -1
+pinkREd
+  rotate: false
+  xy: 817, 583
+  size: 197, 212
+  orig: 197, 212
+  offset: 0, 0
+  index: -1
+yellow
+  rotate: false
+  xy: 2, 806
+  size: 206, 191
+  orig: 206, 191
   offset: 0, 0
   index: -1
 
@@ -107,39 +135,11 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-bLetter
-  rotate: false
-  xy: 789, 7
-  size: 206, 210
-  orig: 206, 210
-  offset: 0, 0
-  index: -1
-background1
+background4
   rotate: false
   xy: 2, 2
-  size: 785, 277
-  orig: 785, 277
-  offset: 0, 0
-  index: -1
-bingo
-  rotate: false
-  xy: 470, 433
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-grey
-  rotate: false
-  xy: 2, 281
-  size: 466, 664
-  orig: 466, 664
-  offset: 0, 0
-  index: -1
-pinkREd
-  rotate: false
-  xy: 789, 219
-  size: 197, 212
-  orig: 197, 212
+  size: 843, 667
+  orig: 843, 667
   offset: 0, 0
   index: -1
 
@@ -150,64 +150,35 @@ filter: Nearest, Nearest
 repeat: none
 bingoBlitz
   rotate: false
-  xy: 2, 622
+  xy: 2, 2
   size: 635, 393
   orig: 635, 393
   offset: 0, 0
   index: -1
-dBlue
+map
   rotate: false
-  xy: 388, 422
-  size: 201, 198
-  orig: 201, 198
+  xy: 2, 397
+  size: 739, 516
+  orig: 739, 516
   offset: 0, 0
   index: -1
-gLetter
+
+gameplay5.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+bingo
+  rotate: false
+  xy: 470, 154
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+grey
   rotate: false
   xy: 2, 2
-  size: 200, 199
-  orig: 200, 199
-  offset: 0, 0
-  index: -1
-green
-  rotate: false
-  xy: 639, 812
-  size: 198, 203
-  orig: 198, 203
-  offset: 0, 0
-  index: -1
-iLetter
-  rotate: false
-  xy: 201, 212
-  size: 188, 198
-  orig: 188, 198
-  offset: 0, 0
-  index: -1
-lightBlue
-  rotate: false
-  xy: 2, 203
-  size: 197, 200
-  orig: 197, 200
-  offset: 0, 0
-  index: -1
-nLetter
-  rotate: false
-  xy: 193, 412
-  size: 193, 208
-  orig: 193, 208
-  offset: 0, 0
-  index: -1
-oLetter
-  rotate: false
-  xy: 2, 405
-  size: 189, 215
-  orig: 189, 215
-  offset: 0, 0
-  index: -1
-yellow
-  rotate: false
-  xy: 639, 619
-  size: 206, 191
-  orig: 206, 191
+  size: 466, 664
+  orig: 466, 664
   offset: 0, 0
   index: -1
