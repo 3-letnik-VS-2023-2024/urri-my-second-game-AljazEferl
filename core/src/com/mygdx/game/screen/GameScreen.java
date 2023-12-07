@@ -65,13 +65,57 @@ public class GameScreen extends ScreenAdapter {
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
 
-        // Set background
         TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.MAP);
         backgroundTable.setBackground(new TextureRegionDrawable(backgroundRegion));
 
-        // Add the background table to the gameplay stage
+
         gameplayStage.addActor(backgroundTable);
 
+        TextButton btnPariz = new TextButton("Pariz", skin);
+
+        btnPariz.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Handle button click here
+                log.debug("Pariz button clicked");
+            }
+        });
+
+        TextButton btnNewYork = new TextButton("New York", skin);
+
+        btnNewYork.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                log.debug("New York button clicked");
+            }
+        });
+        TextButton btnMadrid = new TextButton("Madrid", skin);
+
+        btnMadrid.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                log.debug("Madridbutton clicked");
+            }
+        });
+
+        Actor backBtn = createBackButton();
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        buttonTable.center();
+        buttonTable.add(btnPariz).padBottom(40f);
+        buttonTable.row();
+        buttonTable.add(btnNewYork).padBottom(40f);
+        buttonTable.row();
+        buttonTable.add(btnMadrid).padBottom(40f);
+        buttonTable.row();
+        buttonTable.add(backBtn).bottom().right().pad(20);
+
+
+
+
+        hudStage.addActor(buttonTable);
         Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage));
     }
 
@@ -98,11 +142,29 @@ public class GameScreen extends ScreenAdapter {
     public void hide() {
         dispose();
     }
+    private Actor createBackButton() {
+        TextButton backButton = new TextButton("Back", skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MenuScreen(game));
+            }
+        });
+
+        Table table = new Table();
+        table.bottom().right();
+
+        table.add(backButton).pad(20);
+
+        return table;
+    }
+
 
     @Override
     public void dispose() {
         gameplayStage.dispose();
         hudStage.dispose();
     }
+
 
 }
