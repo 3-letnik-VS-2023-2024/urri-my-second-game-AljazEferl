@@ -96,7 +96,7 @@ public class LeaderboardScreen extends ScreenAdapter {
         Table table = new Table();
         table.setFillParent(true);
         table.center();
-        table.defaults().pad(10);
+        table.defaults().pad(20);
        /* TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(RegionNames.GREY);
         table.setBackground(new TextureRegionDrawable(menuBackgroundRegion));*/
 
@@ -106,12 +106,19 @@ public class LeaderboardScreen extends ScreenAdapter {
             Label scoreLabel = new Label("Score: " + (10 - i), skin);
             table.add(nameLabel).left();
             table.add(scoreLabel).right();
+           // table.add(nameLabel).expandX();
+            //table.add(scoreLabel).expandY();
+
+
             table.row();
         }
 
 
+
         ScrollPane scrollPane = new ScrollPane(table, skin);
         scrollPane.setFadeScrollBars(false);
+       // scrollPane.setScrollingDisabled(true, false);
+       // table.add(scrollPane).colspan(2).expand().fill();
 
         return scrollPane;
     }

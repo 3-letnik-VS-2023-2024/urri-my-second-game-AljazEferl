@@ -44,9 +44,6 @@ public class GameScreen extends ScreenAdapter {
     private Skin skin;
     private TextureAtlas gameplayAtlas;
 
-    private CellState move = GameManager.INSTANCE.getInitMove();
-    private Image infoImage;
-
     public GameScreen(BingoBlitz game) {
         this.game = game;
         assetManager = game.getAssetManager();
@@ -77,6 +74,7 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Handle button click here
+                game.setScreen(new GameScreenMain(game,"Pariz"));
                 log.debug("Pariz button clicked");
             }
         });
@@ -86,7 +84,7 @@ public class GameScreen extends ScreenAdapter {
         btnNewYork.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.setScreen(new GameScreenMain(game,"New York"));
                 log.debug("New York button clicked");
             }
         });
@@ -95,7 +93,7 @@ public class GameScreen extends ScreenAdapter {
         btnMadrid.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.setScreen(new GameScreenMain(game,"Madrid"));
                 log.debug("Madridbutton clicked");
             }
         });

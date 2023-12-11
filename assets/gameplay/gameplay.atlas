@@ -135,11 +135,18 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-background4
+bingoBlitz
   rotate: false
   xy: 2, 2
-  size: 843, 667
-  orig: 843, 667
+  size: 635, 393
+  orig: 635, 393
+  offset: 0, 0
+  index: -1
+newyork
+  rotate: false
+  xy: 2, 397
+  size: 918, 615
+  orig: 918, 615
   offset: 0, 0
   index: -1
 
@@ -148,18 +155,18 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-bingoBlitz
+bingo
   rotate: false
-  xy: 2, 2
-  size: 635, 393
-  orig: 635, 393
+  xy: 2, 154
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
-map
+grey
   rotate: false
-  xy: 2, 397
-  size: 739, 516
-  orig: 739, 516
+  xy: 516, 2
+  size: 466, 664
+  orig: 466, 664
   offset: 0, 0
   index: -1
 
@@ -168,17 +175,49 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-bingo
-  rotate: false
-  xy: 470, 154
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-grey
+background4
   rotate: false
   xy: 2, 2
-  size: 466, 664
-  orig: 466, 664
+  size: 843, 667
+  orig: 843, 667
+  offset: 0, 0
+  index: -1
+
+gameplay6.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+madrid
+  rotate: false
+  xy: 2, 2
+  size: 819, 655
+  orig: 819, 655
+  offset: 0, 0
+  index: -1
+
+gameplay7.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+pariz
+  rotate: false
+  xy: 2, 2
+  size: 724, 593
+  orig: 724, 593
+  offset: 0, 0
+  index: -1
+
+gameplay8.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+map
+  rotate: false
+  xy: 2, 2
+  size: 739, 516
+  orig: 739, 516
   offset: 0, 0
   index: -1

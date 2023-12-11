@@ -23,6 +23,11 @@ public class RegionNames {
     public static final String BLITZ = "bingoBlitz";
     public static final String MAP = "map";
     public static final String MAP1 = "map1";
+    public static final String PARIZ = "pariz";
+    public static final String NEW_YORK = "newyork";
+    public static final String MADRID = "madrid";
+
+
 
 
 
