@@ -31,6 +31,18 @@ com.badlogic.gdx.graphics.Color: {
 		g: 1
 		b: 1
 		a: 1
+	},
+	green: {
+		r: 0,
+		g: 1,
+		b: 0,
+		a: 1
+	},
+	red: {
+		r: 1,
+		g: 0,
+		b: 0,
+		a: 1
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
@@ -100,8 +112,19 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	black: {
 		font: font-big
 		fontColor: black
+	},
+	greenLabel: {
+		font: font-big,
+		fontColor: green
+	},
+	redLabel: {
+		font: font-big,
+		fontColor: red
 	}
-}
+
+
+
+},
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 	default: {
 		font: font

@@ -113,7 +113,7 @@ public class MenuScreen extends ScreenAdapter {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-              //  game.setScreen(new SettingsScreen(game));
+               game.setScreen(new SettingsScreen(game));
             }
         });
 
@@ -131,10 +131,10 @@ public class MenuScreen extends ScreenAdapter {
      //   TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
   //      buttonTable.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
 
-        // buttonTable.add(introButton).padBottom(15).expandX().fillX().row();
+        //buttonTable.add(introButton).padBottom(15).expandX().fillX().row();
         buttonTable.add(playButton).padBottom(20).expandX().fill().row();
         buttonTable.add(leaderboardButton).padBottom(20).fillX().row();
-       // buttonTable.add(settingsButton).padBottom(15).fillX().row();
+       buttonTable.add(settingsButton).padBottom(15).fillX().row();
         buttonTable.add(quitButton).fillX();
 
         buttonTable.center();

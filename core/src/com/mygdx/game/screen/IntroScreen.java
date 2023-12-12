@@ -18,7 +18,7 @@ import com.mygdx.game.config.GameConfig;
 
 public class IntroScreen extends ScreenAdapter {
 
-    public static final float INTRO_DURATION_IN_SEC = 8f;
+    public static final float INTRO_DURATION_IN_SEC = 0f;
 
     private final BingoBlitz game;
     private final AssetManager assetManager;
