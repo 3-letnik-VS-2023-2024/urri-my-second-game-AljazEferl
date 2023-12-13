@@ -61,7 +61,8 @@ public class GameScreenMain extends ScreenAdapter {
     private Label[][] matrixLabels;
     BitmapFont smallFont;
     private TextButton backButton;
-    private Label scoreLabel;
+    private Label healthLabel;
+    private int health = 100;
     private int score = 0;
 
 
@@ -82,7 +83,7 @@ public class GameScreenMain extends ScreenAdapter {
             public void run() {
                 displayNextNumber();
             }
-        }, 1f, 5f);
+        }, 0f, 5f);
     }
     //matrix numbers
     private Actor generateMatrixLabels() {
@@ -99,13 +100,13 @@ public class GameScreenMain extends ScreenAdapter {
 
         Collections.shuffle(availableNumbers);
 
-        smallFont = new BitmapFont();
+       // smallFont = new BitmapFont();
       //  smallFont.getData().setScale(0.2f);
 
         for (int row = 0; row < difficulty.getSize(); row++) {
             for (int col = 0; col < difficulty.getSize(); col++) {
                 int randomNumber = availableNumbers.remove(0);
-                matrixLabels[row][col] = new Label(String.valueOf(randomNumber),skin,"black");// new Label.LabelStyle(smallFont,Color.BLACK));
+                matrixLabels[row][col] = new Label(String.valueOf(randomNumber),skin,"black");// new Label.LabelStyle(skin.get("font-big", BitmapFont.class),Color.BLACK));
                 matrixLabels[row][col].setTouchable(Touchable.enabled);
                 matrixLabels[row][col].addListener(createClickListener(randomNumber));
                 matrixTable.add(matrixLabels[row][col]).pad(10);
@@ -127,7 +128,7 @@ public class GameScreenMain extends ScreenAdapter {
 
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
                     score +=1;
-                    scoreLabel.setText("score: " + score);
+                  //  healthLabel.setText("health: " + health);
                     int bingoCount = getBingoCount();
 
                     if (bingoCount > 0) {
@@ -136,31 +137,31 @@ public class GameScreenMain extends ScreenAdapter {
                             case 1:
                                 // Code for bingoCount == 1
                                 score += 2;
-                                scoreLabel.setText("score: " + score);
+                              //  healthLabel.setText("health: " + health);
                                 break;
 
                             case 2:
                                 // Code for bingoCount == 2
                                 score *= 1.5;
-                                scoreLabel.setText("score: " + score);
+                              //  healthLabel.setText("health: " + health);
                                 break;
 
                             case 3:
                                 // Code for bingoCount == 3
                                 score *= 2.5;
-                                scoreLabel.setText("score: " + score);
-                                break;
+                             //   healthLabel.setText("health: " + health);
+                               // break;
 
                             case 4:
                                 // Code for bingoCount == 4
                                 score *= 3.5;
-                                scoreLabel.setText("score: " + score);
+                               // healthLabel.setText("health: " + health);
                                 break;
 
                             case 5:
                                 // Code for bingoCount == 5
                                 score *= 4.5;
-                                scoreLabel.setText("score: " + score);
+                               // healthLabel.setText("health: " + health);
                                 break;
 
                             default:
@@ -171,11 +172,11 @@ public class GameScreenMain extends ScreenAdapter {
                 } else {
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("redLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.RED));
 
-                        score -= 2;
-                        if (score <= 0){
-                            score = 0;
+                        health -= 25;
+                        if (health <= 0){
+                            game.setScreen(new GameOver(game,selectedCity,score));
                         }
-                        scoreLabel.setText("score: " + score);
+                        healthLabel.setText("health: " + health);
 
                 }
 
@@ -237,7 +238,6 @@ public class GameScreenMain extends ScreenAdapter {
                 consecutiveGreenRows++;
                 System.out.println("Bingo " + consecutiveGreenRows);
             } else {
-                // Reset count if not all green in a row
                 consecutiveGreenRows = 0;
             }
 
@@ -322,15 +322,15 @@ public class GameScreenMain extends ScreenAdapter {
                 game.setScreen(new MenuScreen(game));
             }
         });
-        Table scoreTable = new Table();
-        scoreTable.top().left();
-        scoreTable.setFillParent(true);
+        Table healthTable = new Table();
+        healthTable.top().left();
+        healthTable.setFillParent(true);
 
-        // Add the score label to the new scoreTable
-        scoreLabel = new Label("Score: 0" , skin, "big");
-        scoreTable.setPosition(GameConfig.HUD_WIDTH-scoreLabel.getWidth()-40,0);
-        scoreTable.add(scoreLabel).padTop(20).padRight(20);
-        hudStage.addActor(scoreTable);
+
+        healthLabel = new Label("health: "+ health , skin, "big");
+        healthTable.setPosition(GameConfig.HUD_WIDTH-healthLabel.getWidth()-40,0);
+        healthTable.add(healthLabel).padTop(20).padRight(20);
+        hudStage.addActor(healthTable);
         hudStage.addActor(backButton);
 
        Gdx.input.setInputProcessor(new InputMultiplexer(hudStage, gameplayStage));

@@ -26,6 +26,8 @@ public class RegionNames {
     public static final String PARIZ = "pariz";
     public static final String NEW_YORK = "newyork";
     public static final String MADRID = "madrid";
+    public static final String GAME_OVER = "gameover";
+
 
 
 
