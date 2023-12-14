@@ -59,14 +59,18 @@ public class GameScreenMain extends ScreenAdapter {
 
     private Table matrixTable;
     private Label[][] matrixLabels;
+    private Label[][] matrixLabelsPlayer2;
     BitmapFont smallFont;
     private TextButton backButton;
     private Label healthLabel;
     private int health = 100;
     private int score = 0;
 
+    private Timer.Task numberDisplayTask;
 
     private GameDifficulty difficulty = GameManager.INSTANCE.getInitMove();
+
+
     public GameScreenMain(BingoBlitz game, String selectedCity) {
         this.game = game;
         assetManager = game.getAssetManager();
@@ -76,46 +80,110 @@ public class GameScreenMain extends ScreenAdapter {
 
 
     }
-    //Timer for  bingo numbers 5 seconds
+    private float initialInterval = 2f;
     private void scheduleNumberDisplay() {
-        Timer.schedule(new Timer.Task() {
+        numberDisplayTask = new Timer.Task() {
+            private float initialDelay = 0f;
+
+            private float intervalDecreaseRate = 0.1f;
+            private float timeElapsed = 0f;
+
             @Override
             public void run() {
                 displayNextNumber();
+
+                timeElapsed += initialInterval;
+
+                if (timeElapsed >= 6f) {
+
+                    initialInterval -= intervalDecreaseRate;
+
+
+                    timeElapsed = 0f;
+                }
             }
-        }, 0f, 5f);
+        };
+        Timer.schedule(numberDisplayTask, 0f, initialInterval);
+
     }
+
+
     //matrix numbers
-    private Actor generateMatrixLabels() {
-        Table matrixTable = new Table();
-        matrixTable.center();
-        matrixTable.setFillParent(true);
+    private Table generateMatrixLabels() {
+        Table mainTable = new Table();
+        mainTable.center();
+        mainTable.setFillParent(true);
 
-        matrixLabels = new Label[difficulty.getSize()][difficulty.getSize()];
-        ArrayList<Integer> availableNumbers = new ArrayList<Integer>();
+        if (difficulty == GameDifficulty.EXTREME) {
+            System.out.println("EXTREME MODE ");
+            matrixLabels = new Label[difficulty.getSize()][difficulty.getSize()];
+            matrixLabelsPlayer2 = new Label[difficulty.getSize()][difficulty.getSize()];
+            ArrayList<Integer> availableNumbers = new ArrayList<Integer>();
 
-        for (int i = 1; i <= difficulty.getMaxNumber(); i++) {
-            availableNumbers.add(i);
-        }
-
-        Collections.shuffle(availableNumbers);
-
-       // smallFont = new BitmapFont();
-      //  smallFont.getData().setScale(0.2f);
-
-        for (int row = 0; row < difficulty.getSize(); row++) {
-            for (int col = 0; col < difficulty.getSize(); col++) {
-                int randomNumber = availableNumbers.remove(0);
-                matrixLabels[row][col] = new Label(String.valueOf(randomNumber),skin,"black");// new Label.LabelStyle(skin.get("font-big", BitmapFont.class),Color.BLACK));
-                matrixLabels[row][col].setTouchable(Touchable.enabled);
-                matrixLabels[row][col].addListener(createClickListener(randomNumber));
-                matrixTable.add(matrixLabels[row][col]).pad(10);
+            for (int i = 1; i <= difficulty.getMaxNumber(); i++) {
+                availableNumbers.add(i);
             }
-            matrixTable.row();
+
+            Collections.shuffle(availableNumbers);
+
+            Table matrixTable = new Table();
+            matrixTable.center();
+
+            Table matrixTablePlayer2 = new Table();
+            matrixTablePlayer2.center();
+
+            for (int row = 0; row < difficulty.getSize(); row++) {
+                for (int col = 0; col < difficulty.getSize(); col++) {
+                    int randomNumber = availableNumbers.remove(0);
+
+                    matrixLabels[row][col] = new Label(String.valueOf(randomNumber),skin,"black");// new Label.LabelStyle(skin.get("font", BitmapFont.class), Color.BLACK));
+                    matrixLabels[row][col].setTouchable(Touchable.enabled);
+                    matrixLabels[row][col].addListener(createClickListener(randomNumber));
+                    matrixTable.add(matrixLabels[row][col]).pad(10);
+
+
+                    int randomNumberPlayer2 = availableNumbers.remove(0);
+                    matrixLabelsPlayer2[row][col] = new Label(String.valueOf(randomNumberPlayer2), skin,"black");//new Label.LabelStyle(skin.get("font", BitmapFont.class), Color.BLACK));
+                    matrixTablePlayer2.add(matrixLabelsPlayer2[row][col]).pad(10);
+                }
+
+                matrixTable.row();
+                matrixTablePlayer2.row();
+            }
+
+            mainTable.add(matrixTable).pad(20);
+            mainTable.add(matrixTablePlayer2).pad(20);
+
+        } else {
+            matrixLabels = new Label[difficulty.getSize()][difficulty.getSize()];
+            ArrayList<Integer> availableNumbers = new ArrayList<Integer>();
+
+            for (int i = 1; i <= difficulty.getMaxNumber(); i++) {
+                availableNumbers.add(i);
+            }
+
+            Collections.shuffle(availableNumbers);
+
+            Table matrixTable = new Table();
+            matrixTable.center();
+
+            for (int row = 0; row < difficulty.getSize(); row++) {
+                for (int col = 0; col < difficulty.getSize(); col++) {
+                    int randomNumber = availableNumbers.remove(0);
+                    matrixLabels[row][col] = new Label(String.valueOf(randomNumber), skin, "black");
+                    matrixLabels[row][col].setTouchable(Touchable.enabled);
+                    matrixLabels[row][col].addListener(createClickListener(randomNumber));
+                    matrixTable.add(matrixLabels[row][col]).pad(10);
+                }
+                matrixTable.row();
+            }
+
+            mainTable.add(matrixTable).pad(20);
         }
 
-        return matrixTable;
+        return mainTable;
     }
+
 
     //click event listener
     private ClickListener createClickListener(final int clickedNumber) {
@@ -128,46 +196,10 @@ public class GameScreenMain extends ScreenAdapter {
 
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
                     score +=1;
-                  //  healthLabel.setText("health: " + health);
-                    int bingoCount = getBingoCount();
 
-                    if (bingoCount > 0) {
-                        System.out.println("Bingo " + bingoCount);
-                        switch (bingoCount) {
-                            case 1:
-                                // Code for bingoCount == 1
-                                score += 2;
-                              //  healthLabel.setText("health: " + health);
-                                break;
-
-                            case 2:
-                                // Code for bingoCount == 2
-                                score *= 1.5;
-                              //  healthLabel.setText("health: " + health);
-                                break;
-
-                            case 3:
-                                // Code for bingoCount == 3
-                                score *= 2.5;
-                             //   healthLabel.setText("health: " + health);
-                               // break;
-
-                            case 4:
-                                // Code for bingoCount == 4
-                                score *= 3.5;
-                               // healthLabel.setText("health: " + health);
-                                break;
-
-                            case 5:
-                                // Code for bingoCount == 5
-                                score *= 4.5;
-                               // healthLabel.setText("health: " + health);
-                                break;
-
-                            default:
-                                // Code for other values of bingoCount (if needed)
-                                break;
-                        }
+                    if(isBingo()){
+                        //System.out.println("Bingo");
+                        game.setScreen(new WinScreen(game,score,"player"));
                     }
                 } else {
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("redLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.RED));
@@ -179,7 +211,6 @@ public class GameScreenMain extends ScreenAdapter {
                         healthLabel.setText("health: " + health);
 
                 }
-
             }
         };
     }
@@ -228,11 +259,12 @@ public class GameScreenMain extends ScreenAdapter {
                 Label.LabelStyle style = label.getStyle();
                 Color color = style.fontColor;
 
-                if (color != Color.GREEN) {
+                if (!color.equals(Color.GREEN)) {
                     allGreen = false;
                     break;
                 }
             }
+
 
             if (allGreen) {
                 consecutiveGreenRows++;
@@ -246,6 +278,111 @@ public class GameScreenMain extends ScreenAdapter {
         return consecutiveGreenRows;
     }
 
+
+    private boolean isBingo() {
+        // Check rows
+        for (int i = 0; i < matrixLabels.length; i++) {
+            if (checkLine(matrixLabels[i])) {
+                System.out.println("Bingo!");
+                return true;
+            }
+        }
+
+        // Check columns
+        for (int j = 0; j < matrixLabels[0].length; j++) {
+            Label[] column = new Label[matrixLabels.length];
+            for (int i = 0; i < matrixLabels.length; i++) {
+                column[i] = matrixLabels[i][j];
+            }
+
+            if (checkLine(column)) {
+                System.out.println("Bingo!");
+                return true;
+            }
+        }
+
+        // Check main diagonal
+        Label[] mainDiagonal = new Label[matrixLabels.length];
+        for (int i = 0; i < matrixLabels.length; i++) {
+            mainDiagonal[i] = matrixLabels[i][i];
+        }
+        if (checkLine(mainDiagonal)) {
+            System.out.println("Bingo!");
+            return true;
+        }
+
+        // Check secondary diagonal
+        Label[] secondaryDiagonal = new Label[matrixLabels.length];
+        for (int i = 0; i < matrixLabels.length; i++) {
+            secondaryDiagonal[i] = matrixLabels[i][matrixLabels.length - 1 - i];
+        }
+        if (checkLine(secondaryDiagonal)) {
+            System.out.println("Bingo!");
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private boolean isBingoAi() {
+        // Check rows
+        for (int i = 0; i < matrixLabelsPlayer2.length; i++) {
+            if (checkLine(matrixLabelsPlayer2[i])) {
+                System.out.println("Bingo!");
+                return true;
+            }
+        }
+
+        // Check columns
+        for (int j = 0; j < matrixLabelsPlayer2[0].length; j++) {
+            Label[] column = new Label[matrixLabelsPlayer2.length];
+            for (int i = 0; i < matrixLabelsPlayer2.length; i++) {
+                column[i] = matrixLabelsPlayer2[i][j];
+            }
+
+            if (checkLine(column)) {
+                System.out.println("Bingo  AI! ");
+                return true;
+            }
+        }
+
+        // Check main diagonal
+        Label[] mainDiagonal = new Label[matrixLabelsPlayer2.length];
+        for (int i = 0; i < matrixLabelsPlayer2.length; i++) {
+            mainDiagonal[i] = matrixLabelsPlayer2[i][i];
+        }
+        if (checkLine(mainDiagonal)) {
+            System.out.println("Bingo!");
+            return true;
+        }
+
+        // Check secondary diagonal
+        Label[] secondaryDiagonal = new Label[matrixLabelsPlayer2.length];
+        for (int i = 0; i < matrixLabelsPlayer2.length; i++) {
+            secondaryDiagonal[i] = matrixLabelsPlayer2[i][matrixLabelsPlayer2.length - 1 - i];
+        }
+        if (checkLine(secondaryDiagonal)) {
+            System.out.println("Bingo!");
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private boolean checkLine(Label[] line) {
+        for (Label label : line) {
+            Label.LabelStyle style = label.getStyle();
+            Color color = style.fontColor;
+
+            if (!color.equals(Color.GREEN)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 
     private void displayNextNumber() {
@@ -265,6 +402,22 @@ public class GameScreenMain extends ScreenAdapter {
             }
 
             numberLabel.setText(String.valueOf(number));
+            if (difficulty == GameDifficulty.EXTREME) {
+                for (int row = 0; row < difficulty.getSize(); row++) {
+                    for (int col = 0; col < difficulty.getSize(); col++) {
+                        int secondPlayerNumber = Integer.parseInt(matrixLabelsPlayer2[row][col].getText().toString());
+                        if (number == secondPlayerNumber) {
+                            matrixLabelsPlayer2[row][col].setStyle(skin.get("greenLabel", Label.LabelStyle.class));
+                        }
+                    }
+                }
+
+                if(isBingoAi()){
+                    //System.out.println("KOMP JE ZMAGo");
+                    game.setScreen(new WinScreen(game,score,"ai"));
+                }
+
+            }
 
             currentNumberIndex++;
         } else {
@@ -349,6 +502,7 @@ public class GameScreenMain extends ScreenAdapter {
         // update
         gameplayStage.act(delta);
         hudStage.act(delta);
+
         // draw
         gameplayStage.draw();
         hudStage.draw();
@@ -357,13 +511,21 @@ public class GameScreenMain extends ScreenAdapter {
 
     @Override
     public void hide() {
+        cancelTimer();
         dispose();
     }
 
     @Override
     public void dispose() {
+        cancelTimer();
         gameplayStage.dispose();
         hudStage.dispose();
+    }
+
+    private void cancelTimer() {
+        if (numberDisplayTask != null) {
+            numberDisplayTask.cancel();
+        }
     }
 
 }

@@ -4,7 +4,9 @@ public enum GameDifficulty {
     EMPTY(0, 0),
     EASY(3, 25),
     MEDIUM(4, 50),
-    HARD(5, 99);
+    HARD(5, 99),
+    EXTREME(4,99);
+
 
     private final int size;
     private final int maxNumber;

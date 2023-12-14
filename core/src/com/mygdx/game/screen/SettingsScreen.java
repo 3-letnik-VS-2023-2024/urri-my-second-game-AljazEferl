@@ -43,6 +43,8 @@ public class SettingsScreen extends ScreenAdapter {
     private CheckBox checkBoxO;
     private CheckBox hard;
 
+    private CheckBox extreme;
+
     public SettingsScreen(BingoBlitz game) {
         this.game = game;
         assetManager = game.getAssetManager();
@@ -100,6 +102,8 @@ public class SettingsScreen extends ScreenAdapter {
                     GameManager.INSTANCE.setInitMove(GameDifficulty.MEDIUM);
                 }else if(checked == hard){
                     GameManager.INSTANCE.setInitMove(GameDifficulty.HARD);
+                }else if(checked == extreme){
+                    GameManager.INSTANCE.setInitMove(GameDifficulty.EXTREME);
                 }
             }
         };
@@ -107,12 +111,16 @@ public class SettingsScreen extends ScreenAdapter {
         checkBoxX = new CheckBox(GameDifficulty.EASY.name(), uiSkin);
         checkBoxO = new CheckBox(GameDifficulty.MEDIUM.name(), uiSkin);
         hard = new CheckBox(GameDifficulty.HARD.name(),uiSkin);
+        extreme = new CheckBox(GameDifficulty.EXTREME.name(),uiSkin);
+
 
         checkBoxX.addListener(listener);
         checkBoxO.addListener(listener);
         hard.addListener(listener);
+        extreme.addListener(listener);
 
-        checkBoxGroup = new ButtonGroup<>(checkBoxX, checkBoxO,hard);
+
+        checkBoxGroup = new ButtonGroup<>(checkBoxX, checkBoxO,hard,extreme);
         checkBoxGroup.setChecked(GameManager.INSTANCE.getInitMove().name());
 
         TextButton backButton = new TextButton("Back", uiSkin);
@@ -128,11 +136,13 @@ public class SettingsScreen extends ScreenAdapter {
         TextureRegion menuBackground = gameplayAtlas.findRegion(RegionNames.GREY);
         contentTable.setBackground(new TextureRegionDrawable(menuBackground));
 
-        contentTable.add(new Label("Settings", uiSkin)).padBottom(50).colspan(2).row();
-        contentTable.add(new Label("Choose init move:", uiSkin)).colspan(2).row();
-        contentTable.add(checkBoxX);
+        contentTable.add(new Label("SETTINGS", uiSkin,"big")).padBottom(50).row();
+        contentTable.add(new Label("Choose difficulty:", uiSkin)).row();
+        contentTable.add(checkBoxX).row();
         contentTable.add(checkBoxO).row();
         contentTable.add(hard).row();
+        contentTable.add(extreme).row();
+
         contentTable.add(backButton).width(100).padTop(50).colspan(2);
 
         table.add(contentTable);

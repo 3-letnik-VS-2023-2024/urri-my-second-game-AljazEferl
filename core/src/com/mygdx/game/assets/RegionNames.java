@@ -28,6 +28,8 @@ public class RegionNames {
     public static final String MADRID = "madrid";
     public static final String GAME_OVER = "gameover";
 
+    public static final String BEIGE = "beige";
+
 
 
 
