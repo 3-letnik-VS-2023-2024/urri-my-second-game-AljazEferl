@@ -44,6 +44,11 @@ public class SettingsScreen extends ScreenAdapter {
     private CheckBox hard;
 
     private CheckBox extreme;
+    private ButtonGroup<CheckBox> musicCheckBoxGroup;
+    private CheckBox musicOnCheckBox;
+    private CheckBox musicOffCheckBox;
+
+
 
     public SettingsScreen(BingoBlitz game) {
         this.game = game;
@@ -142,6 +147,33 @@ public class SettingsScreen extends ScreenAdapter {
         contentTable.add(checkBoxO).row();
         contentTable.add(hard).row();
         contentTable.add(extreme).row();
+
+        musicOnCheckBox = new CheckBox("ON", uiSkin);
+        musicOffCheckBox = new CheckBox("OFF", uiSkin);
+
+        musicCheckBoxGroup = new ButtonGroup<>(musicOnCheckBox, musicOffCheckBox);
+
+        ChangeListener listener1 = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                CheckBox checked = musicCheckBoxGroup.getChecked();
+                if (checked == musicOnCheckBox) {
+                    GameManager.INSTANCE.setMusicEnabled(true);
+                } else if (checked == musicOffCheckBox) {
+                    GameManager.INSTANCE.setMusicEnabled(false);
+                }
+            }
+        };
+        musicOnCheckBox.addListener(listener1);
+        musicOffCheckBox.addListener(listener1);
+
+        boolean isMusicEnabled = GameManager.INSTANCE.isMusicEnabled();
+        musicOnCheckBox.setChecked(isMusicEnabled);
+        musicOffCheckBox.setChecked(!isMusicEnabled);
+
+        contentTable.add(new Label("Music:", uiSkin)).padTop(30).row();
+        contentTable.add(musicOnCheckBox).padTop(10).row();
+        contentTable.add(musicOffCheckBox).padTop(10).row();
 
         contentTable.add(backButton).width(100).padTop(50).colspan(2);
 

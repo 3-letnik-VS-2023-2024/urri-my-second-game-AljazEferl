@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -43,6 +44,8 @@ public class GameScreen extends ScreenAdapter {
 
     private Skin skin;
     private TextureAtlas gameplayAtlas;
+    private Music music;
+
 
     public GameScreen(BingoBlitz game) {
         this.game = game;
@@ -57,8 +60,19 @@ public class GameScreen extends ScreenAdapter {
         gameplayStage = new Stage(viewport, game.getBatch());
         hudStage = new Stage(hudViewport, game.getBatch());
 
+
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
+
+        music = assetManager.get(AssetDescriptors.PIRATES);
+        if(GameManager.INSTANCE.isMusicEnabled()) {
+            music.setLooping(true);
+            music.setVolume(0.5f);
+            music.play();
+        }
+        else {
+            music.stop();
+        }
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
 
@@ -138,6 +152,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
+
         dispose();
     }
     private Actor createBackButton() {
@@ -145,6 +160,7 @@ public class GameScreen extends ScreenAdapter {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                music.stop();
                 game.setScreen(new MenuScreen(game));
             }
         });

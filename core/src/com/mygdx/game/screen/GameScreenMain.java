@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -50,7 +52,7 @@ public class GameScreenMain extends ScreenAdapter {
 
     private Stage gameplayStage;
     private Stage hudStage;
-
+    private Music music;
     private Skin skin;
     private TextureAtlas gameplayAtlas;
     private String selectedCity;
@@ -69,6 +71,8 @@ public class GameScreenMain extends ScreenAdapter {
     private Label healthLabel;
     private int health = 100;
     private int score = 0;
+    private Sound soundWrong;
+    private Sound soundCorrect;
 
     private Timer.Task numberDisplayTask;
 
@@ -239,14 +243,14 @@ public class GameScreenMain extends ScreenAdapter {
 
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
                     score +=1;
-
+                    soundCorrect.play();
                     if(isBingo()){
                         //System.out.println("Bingo");
                         game.setScreen(new WinScreen(game,score,"player"));
                     }
                 } else {
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("redLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.RED));
-
+                        soundWrong.play();
                         health -= 25;
                         if (health <= 0){
                             game.setScreen(new GameOver(game,selectedCity,score));
@@ -487,6 +491,21 @@ public class GameScreenMain extends ScreenAdapter {
 
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
+        music = assetManager.get(AssetDescriptors.PIRATES);
+        soundWrong = assetManager.get(AssetDescriptors.WRONG);
+        soundCorrect = assetManager.get(AssetDescriptors.CORRECT);
+
+
+
+        if(GameManager.INSTANCE.isMusicEnabled()) {
+            music.setLooping(true);
+            music.setVolume(0.5f);
+            music.play();
+        }
+        else {
+            music.stop();
+        }
+
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
 
@@ -553,12 +572,16 @@ public class GameScreenMain extends ScreenAdapter {
 
     @Override
     public void hide() {
+        music.stop();
+        music.dispose();
         cancelTimer();
         dispose();
     }
 
     @Override
     public void dispose() {
+        soundCorrect.dispose();
+        soundWrong.dispose();
         cancelTimer();
         gameplayStage.dispose();
         hudStage.dispose();

@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.BingoBlitz;
 import com.mygdx.game.assets.AssetDescriptors;
 import com.mygdx.game.assets.RegionNames;
+import com.mygdx.game.common.GameManager;
 import com.mygdx.game.config.GameConfig;
 
 
@@ -50,11 +51,14 @@ public class MenuScreen extends ScreenAdapter {
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
         musicOg = assetManager.get(AssetDescriptors.OG);
-
-        musicOg.setLooping(true);
-        musicOg.setVolume(0.5f);
-        musicOg.play();
-
+        if(GameManager.INSTANCE.isMusicEnabled()){
+            musicOg.setLooping(true);
+            musicOg.setVolume(0.5f);
+            musicOg.play();
+        }
+        else {
+            musicOg.stop();
+        }
 
         stage.addActor(createUi());
         Gdx.input.setInputProcessor(stage);
@@ -76,8 +80,6 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void hide() {
 
-        musicOg.stop();
-        musicOg.dispose();
         dispose();
     }
 
@@ -108,6 +110,8 @@ public class MenuScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GameScreen(game));
+                musicOg.stop();
+                musicOg.stop();
             }
         });
 
@@ -156,4 +160,5 @@ public class MenuScreen extends ScreenAdapter {
 
         return table;
     }
+
 }
