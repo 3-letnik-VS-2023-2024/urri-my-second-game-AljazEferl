@@ -7,8 +7,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -20,6 +22,8 @@ import com.mygdx.game.assets.AssetDescriptors;
 import com.mygdx.game.assets.RegionNames;
 import com.mygdx.game.config.GameConfig;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+
+import java.util.Comparator;
 
 
 public class LeaderboardScreen extends ScreenAdapter {
@@ -34,6 +38,7 @@ public class LeaderboardScreen extends ScreenAdapter {
     private Skin skin;
     private Table leaderboardTable;
     private TextureAtlas gameplayAtlas;
+    private TextButton backButton;
 
     public LeaderboardScreen(BingoBlitz game) {
         this.game = game;
@@ -46,6 +51,13 @@ public class LeaderboardScreen extends ScreenAdapter {
         stage = new Stage(viewport, game.getBatch());
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
+
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        buttonTable.top().right().padTop(10).padRight(10);
+        buttonTable.add(backButton);
+
+        stage.addActor(buttonTable);
         loadAndDisplayLeaderboard();
 
         Gdx.input.setInputProcessor(stage);
@@ -76,11 +88,18 @@ public class LeaderboardScreen extends ScreenAdapter {
     }
 
     private void initializeLeaderboard(Array<PlayerData> leaderboard) {
+
+        leaderboard.sort(new Comparator<PlayerData>() {
+            @Override
+            public int compare(PlayerData player1, PlayerData player2) {
+                return Integer.compare(player2.getScore(), player1.getScore());
+            }
+        });
+
         leaderboardTable = new Table(skin);
         TextureRegion background = gameplayAtlas.findRegion(RegionNames.GREY);
         leaderboardTable.setBackground(new TextureRegionDrawable(background));
         leaderboardTable.center().top().padTop(50);
-
 
         Label titleLabel = new Label("LEADERBOARD", skin, "big");
         leaderboardTable.add(titleLabel).colspan(2).padBottom(20).row();
@@ -94,6 +113,16 @@ public class LeaderboardScreen extends ScreenAdapter {
             leaderboardTable.add(new Label(String.valueOf(playerData.getScore()), skin, "default")).padRight(50);
             leaderboardTable.row();
         }
+        backButton = new TextButton("Back", skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MenuScreen(game));
+            }
+        });
+
+        leaderboardTable.row().padTop(20);
+        leaderboardTable.add(backButton).colspan(2).padTop(20);
 
         ScrollPane scrollPane = new ScrollPane(leaderboardTable, skin);
         scrollPane.setFillParent(true);

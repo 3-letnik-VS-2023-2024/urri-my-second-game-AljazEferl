@@ -5,6 +5,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,7 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.Timer;
@@ -127,6 +131,8 @@ public class GameScreenMain extends ScreenAdapter {
             Collections.shuffle(availableNumbers);
 
             Table matrixTable = new Table();
+
+            matrixTable.setBackground(getColoredBackground(1, 1, 1, 0.5f));
             matrixTable.center();
 
             Table matrixTablePlayer2 = new Table();
@@ -165,6 +171,8 @@ public class GameScreenMain extends ScreenAdapter {
             Collections.shuffle(availableNumbers);
 
             Table matrixTable = new Table();
+         //   matrixTable.setBackground(getColoredBackground(1, 1, 1, 0.5f));
+            matrixTable.setBackground(getGridBackground(1, 1, 1, 0.5f,100));
             matrixTable.center();
 
             for (int row = 0; row < difficulty.getSize(); row++) {
@@ -173,7 +181,8 @@ public class GameScreenMain extends ScreenAdapter {
                     matrixLabels[row][col] = new Label(String.valueOf(randomNumber), skin, "black");
                     matrixLabels[row][col].setTouchable(Touchable.enabled);
                     matrixLabels[row][col].addListener(createClickListener(randomNumber));
-                    matrixTable.add(matrixLabels[row][col]).pad(10);
+                    matrixTable.add(matrixLabels[row][col]).pad(10).center();
+
                 }
                 matrixTable.row();
             }
@@ -183,8 +192,42 @@ public class GameScreenMain extends ScreenAdapter {
 
         return mainTable;
     }
+    private Drawable getGridBackground(float r, float g, float b, float a, int gridSize) {
+        Pixmap pixmap = new Pixmap(gridSize, gridSize, Pixmap.Format.RGBA8888);
 
+        // Set the background color
+        pixmap.setColor(r, g, b, a);
+        pixmap.fill();
 
+        // Draw grid lines
+        pixmap.setColor(0, 0, 0, 1); // Black color for grid lines
+
+        // Draw horizontal lines
+        for (int i = 1; i < 3; i++) {
+            pixmap.drawLine(0, i * gridSize / 3, gridSize, i * gridSize / 3);
+        }
+
+        // Draw vertical lines
+        for (int i = 1; i < 3; i++) {
+            pixmap.drawLine(i * gridSize / 3, 0, i * gridSize / 3, gridSize);
+        }
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        return new TextureRegionDrawable(new TextureRegion(texture));
+    }
+
+    private Drawable getColoredBackground(float r, float g, float b, float a) {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(r, g, b, a);
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        return new TextureRegionDrawable(new TextureRegion(texture));
+    }
     //click event listener
     private ClickListener createClickListener(final int clickedNumber) {
         return new ClickListener() {
@@ -301,7 +344,6 @@ public class GameScreenMain extends ScreenAdapter {
             }
         }
 
-        // Check main diagonal
         Label[] mainDiagonal = new Label[matrixLabels.length];
         for (int i = 0; i < matrixLabels.length; i++) {
             mainDiagonal[i] = matrixLabels[i][i];
@@ -357,7 +399,7 @@ public class GameScreenMain extends ScreenAdapter {
             return true;
         }
 
-        // Check secondary diagonal
+
         Label[] secondaryDiagonal = new Label[matrixLabelsPlayer2.length];
         for (int i = 0; i < matrixLabelsPlayer2.length; i++) {
             secondaryDiagonal[i] = matrixLabelsPlayer2[i][matrixLabelsPlayer2.length - 1 - i];

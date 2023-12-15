@@ -3,6 +3,7 @@ package com.mygdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -34,6 +35,7 @@ public class MenuScreen extends ScreenAdapter {
 
     private Skin skin;
     private TextureAtlas gameplayAtlas;
+    private Music musicOg;
 
     public MenuScreen(BingoBlitz game) {
         this.game = game;
@@ -47,6 +49,11 @@ public class MenuScreen extends ScreenAdapter {
 
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
+        musicOg = assetManager.get(AssetDescriptors.OG);
+
+        musicOg.setLooping(true);
+        musicOg.setVolume(0.5f);
+        musicOg.play();
 
 
         stage.addActor(createUi());
@@ -68,6 +75,9 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void hide() {
+
+        musicOg.stop();
+        musicOg.dispose();
         dispose();
     }
 

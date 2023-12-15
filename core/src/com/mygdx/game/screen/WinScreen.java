@@ -3,6 +3,7 @@ package com.mygdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,9 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.BingoBlitz;
+import com.mygdx.game.PlayerData;
 import com.mygdx.game.assets.AssetDescriptors;
 import com.mygdx.game.assets.RegionNames;
 import com.mygdx.game.config.GameConfig;
@@ -33,9 +37,9 @@ public class WinScreen extends ScreenAdapter {
     private Skin skin;
     private TextureAtlas gameplayAtlas;
     private Table table;
-    private  String selectedCity;
     private int score;
     private String aiOrplayer;
+    private static final String LEADERBOARD_JSON_FILE = "assets/leaderboard/leaderboard.json";
 
     public WinScreen(BingoBlitz game, int score,String aiOrplayer) {
         this.game = game;
@@ -88,6 +92,7 @@ public class WinScreen extends ScreenAdapter {
 
         gameOverLabel.setText("COMPUTER HAS WON");
         if(aiOrplayer == "player"){
+            savePlayerScore(new PlayerData("Nino", score));
             gameOverLabel.setText("YOU HAVE WON");
             background = gameplayAtlas.findRegion(RegionNames.BEIGE);
             table.setBackground(new TextureRegionDrawable(background));
@@ -108,6 +113,51 @@ public class WinScreen extends ScreenAdapter {
         gameplayStage.addActor(table);
         Gdx.input.setInputProcessor(gameplayStage);
     }
+    private void savePlayerScore(PlayerData playerData) {
+        Array<PlayerData> leaderboard = loadLeaderboard();
+
+        if (leaderboard == null) {
+            leaderboard = new Array<>();
+        }
+
+        leaderboard.add(playerData);
+
+        saveLeaderboard(leaderboard);
+    }
+
+
+    private void saveLeaderboard(Array<PlayerData> leaderboard) {
+        Json json = new Json();
+        FileHandle file = Gdx.files.local(LEADERBOARD_JSON_FILE);
+
+        try {
+            String jsonStr = json.toJson(leaderboard);
+            file.writeString(jsonStr, false);
+            Gdx.app.log("SaveLeaderboard", "Leaderboard saved successfully!");
+            System.out.println("SaveLeaderboardLeaderboard saved successfully!");
+        } catch (Exception e) {
+            Gdx.app.error("SaveLeaderboard", "Error saving leaderboard: " + e.getMessage());
+        }
+    }
+
+    private Array<PlayerData> loadLeaderboard() {
+        Json json = new Json();
+        FileHandle file = Gdx.files.local(LEADERBOARD_JSON_FILE);
+
+        try {
+            if (file.exists()) {
+                String jsonStr = file.readString();
+                return json.fromJson(Array.class, PlayerData.class, jsonStr);
+            } else {
+                return new Array<>();
+            }
+        } catch (Exception e) {
+            Gdx.app.error("LoadLeaderboard", "Error loading leaderboard: " + e.getMessage());
+            System.out.println("LoadLeaderboard Error loading leaderboard ");
+            return new Array<>();
+        }
+    }
+
     @Override
     public void render(float delta) {
 
