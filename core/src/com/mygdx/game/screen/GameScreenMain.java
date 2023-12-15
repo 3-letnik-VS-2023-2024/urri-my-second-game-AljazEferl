@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -35,6 +36,8 @@ import com.mygdx.game.assets.AssetDescriptors;
 import com.mygdx.game.assets.RegionNames;
 import com.mygdx.game.common.GameManager;
 import com.mygdx.game.config.GameConfig;
+
+import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,8 +78,14 @@ public class GameScreenMain extends ScreenAdapter {
     private Sound soundCorrect;
 
     private Timer.Task numberDisplayTask;
+    private Image powerUpImage;
+    private int greenOnes = 0;
+    private TextureRegion defaultPowerUpRegion;
+    private TextureRegion alternatePowerUpRegion;
 
     private GameDifficulty difficulty = GameManager.INSTANCE.getInitMove();
+    private TextureRegionDrawable defaultPowerUpDrawable;
+    private TextureRegionDrawable alternatePowerUpDrawable;
 
 
     public GameScreenMain(BingoBlitz game, String selectedCity) {
@@ -136,7 +145,7 @@ public class GameScreenMain extends ScreenAdapter {
 
             Table matrixTable = new Table();
 
-            matrixTable.setBackground(getColoredBackground(1, 1, 1, 0.5f));
+            matrixTable.setBackground(getGridBackground(1, 1, 1, 0.5f,80));
             matrixTable.center();
 
             Table matrixTablePlayer2 = new Table();
@@ -207,13 +216,13 @@ public class GameScreenMain extends ScreenAdapter {
         pixmap.setColor(0, 0, 0, 1); // Black color for grid lines
 
         // Draw horizontal lines
-        for (int i = 1; i < 3; i++) {
-            pixmap.drawLine(0, i * gridSize / 3, gridSize, i * gridSize / 3);
+        for (int i = 1; i < difficulty.getSize(); i++) {
+            pixmap.drawLine(0, i * gridSize / difficulty.getSize(), gridSize, i * gridSize / difficulty.getSize());
         }
 
         // Draw vertical lines
-        for (int i = 1; i < 3; i++) {
-            pixmap.drawLine(i * gridSize / 3, 0, i * gridSize / 3, gridSize);
+        for (int i = 1; i < difficulty.getSize(); i++) {
+            pixmap.drawLine(i * gridSize / difficulty.getSize(), 0, i * gridSize / difficulty.getSize(), gridSize);
         }
 
         Texture texture = new Texture(pixmap);
@@ -222,7 +231,7 @@ public class GameScreenMain extends ScreenAdapter {
         return new TextureRegionDrawable(new TextureRegion(texture));
     }
 
-    private Drawable getColoredBackground(float r, float g, float b, float a) {
+    /*private Drawable getColoredBackground(float r, float g, float b, float a) {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(r, g, b, a);
         pixmap.fill();
@@ -231,7 +240,7 @@ public class GameScreenMain extends ScreenAdapter {
         pixmap.dispose();
 
         return new TextureRegionDrawable(new TextureRegion(texture));
-    }
+    }*/
     //click event listener
     private ClickListener createClickListener(final int clickedNumber) {
         return new ClickListener() {
@@ -239,10 +248,22 @@ public class GameScreenMain extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Clicked Number: " + clickedNumber);
                 int displayedNumber = Integer.parseInt(numberLabel.getText().toString());
-                if (clickedNumber == displayedNumber) {
 
+                if (clickedNumber == displayedNumber) {
+                   /* TextureRegion greenCheckRegion = gameplayAtlas.findRegion(RegionNames.GREY);
+                    Image greenCheck = new Image(new TextureRegionDrawable(greenCheckRegion));
+                    float imageSize = 50f;
+                    greenCheck.setSize(imageSize, imageSize);
+                    float labelX = matrixLabels[getClickedRow(event)][getClickedColumn(event)].getX();
+                    float labelY = matrixLabels[getClickedRow(event)][getClickedColumn(event)].getY();
+
+                    greenCheck.setPosition(labelX+ greenCheck.getImageWidth()*5, labelY);
+                    gameplayStage.addActor(greenCheck);*/
+
+                    soundCorrect.play();
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
                     score +=1;
+                    ++greenOnes;
                     soundCorrect.play();
                     if(isBingo()){
                         //System.out.println("Bingo");
@@ -258,6 +279,7 @@ public class GameScreenMain extends ScreenAdapter {
                         healthLabel.setText("health: " + health);
 
                 }
+                System.out.println("GG"+greenOnes);
             }
         };
     }
@@ -292,37 +314,6 @@ public class GameScreenMain extends ScreenAdapter {
         }
 
         return col;
-    }
-
-    private int getBingoCount() {
-        int bingoCount = 0;
-        int consecutiveGreenRows = 0;
-
-        for (int i = 0; i < matrixLabels.length; i++) {
-            boolean allGreen = true;
-
-            for (int j = 0; j < matrixLabels[i].length; j++) {
-                Label label = matrixLabels[i][j];
-                Label.LabelStyle style = label.getStyle();
-                Color color = style.fontColor;
-
-                if (!color.equals(Color.GREEN)) {
-                    allGreen = false;
-                    break;
-                }
-            }
-
-
-            if (allGreen) {
-                consecutiveGreenRows++;
-                System.out.println("Bingo " + consecutiveGreenRows);
-            } else {
-                consecutiveGreenRows = 0;
-            }
-
-        }
-
-        return consecutiveGreenRows;
     }
 
 
@@ -480,6 +471,8 @@ public class GameScreenMain extends ScreenAdapter {
         System.out.println("Shuffled Array: " + numbers);
         return numbers;
     }
+    private int n = 5;
+
     @Override
     public void show() {
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
@@ -494,6 +487,26 @@ public class GameScreenMain extends ScreenAdapter {
         music = assetManager.get(AssetDescriptors.PIRATES);
         soundWrong = assetManager.get(AssetDescriptors.WRONG);
         soundCorrect = assetManager.get(AssetDescriptors.CORRECT);
+
+
+        defaultPowerUpRegion = gameplayAtlas.findRegion(RegionNames.COLD);
+        defaultPowerUpDrawable = new TextureRegionDrawable(defaultPowerUpRegion);
+        powerUpImage = new Image(defaultPowerUpDrawable);
+        powerUpImage.setSize(50, 50); // Set the size as needed
+        powerUpImage.setPosition(GameConfig.HUD_WIDTH / 2f - powerUpImage.getWidth() / 2f, GameConfig.HUD_HEIGHT - 85);
+        alternatePowerUpRegion = gameplayAtlas.findRegion(RegionNames.HOT);
+        alternatePowerUpDrawable = new TextureRegionDrawable(alternatePowerUpRegion);
+
+
+        powerUpImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //if(greenOnes % n == 0) {
+                    applyPowerUp();
+                    n += 5;
+                //}
+            }
+        });
 
 
 
@@ -546,11 +559,46 @@ public class GameScreenMain extends ScreenAdapter {
         healthTable.add(healthLabel).padTop(20).padRight(20);
         hudStage.addActor(healthTable);
         hudStage.addActor(backButton);
+        hudStage.addActor(powerUpImage);
 
        Gdx.input.setInputProcessor(new InputMultiplexer(hudStage, gameplayStage));
     }
 
+    private void applyPowerUp() {
+        // Generate a random row and column
+        int randomRow = getRandomRow();
+        int randomCol = getRandomColumn();
 
+        // Change the color of the selected label to green
+        matrixLabels[randomRow][randomCol].setStyle(skin.get("greenLabel", Label.LabelStyle.class));
+        if(matrixLabelsPlayer2 == null){
+            if(isBingo()){
+                //System.out.println("Bingo");
+                game.setScreen(new WinScreen(game,score,"player"));
+            }
+        }
+        else {
+            if (isBingoAi()) {
+                //System.out.println("KOMP JE ZMAGo");
+                game.setScreen(new WinScreen(game, score, "ai"));
+            }
+            if(isBingo()){
+                //System.out.println("Bingo");
+                game.setScreen(new WinScreen(game,score,"player"));
+            }
+        }
+
+
+        // You can also add any additional logic for the power-up effect
+    }
+
+    private int getRandomRow() {
+        return new Random().nextInt(difficulty.getSize());
+    }
+
+    private int getRandomColumn() {
+        return new Random().nextInt(difficulty.getSize());
+    }
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -568,20 +616,34 @@ public class GameScreenMain extends ScreenAdapter {
         gameplayStage.draw();
         hudStage.draw();
 
+       /* if (greenOnes % n == 0) {
+            applyPowerUp();
+            n += 5;
+
+            // Change the drawable when the condition is true
+            powerUpImage.setDrawable(alternatePowerUpDrawable);
+        } else {
+            // Change it back to the default drawable when the condition is false
+            powerUpImage.setDrawable(defaultPowerUpDrawable);
+        }*/
+
+
     }
 
     @Override
     public void hide() {
         music.stop();
         music.dispose();
+        soundCorrect.dispose();
+        soundWrong.dispose();
         cancelTimer();
         dispose();
+
     }
+
 
     @Override
     public void dispose() {
-        soundCorrect.dispose();
-        soundWrong.dispose();
         cancelTimer();
         gameplayStage.dispose();
         hudStage.dispose();

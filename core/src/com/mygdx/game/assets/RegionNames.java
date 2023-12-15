@@ -30,6 +30,10 @@ public class RegionNames {
 
     public static final String BEIGE = "beige";
 
+    public static final String COLD = "cold";
+
+    public static final String HOT = "hot";
+
 
 
 
