@@ -79,7 +79,7 @@ public class GameScreenMain extends ScreenAdapter {
 
     private Timer.Task numberDisplayTask;
     private Image powerUpImage;
-    private int greenOnes = 0;
+    private int greenOnes = 1;
     private TextureRegion defaultPowerUpRegion;
     private TextureRegion alternatePowerUpRegion;
 
@@ -242,6 +242,7 @@ public class GameScreenMain extends ScreenAdapter {
         return new TextureRegionDrawable(new TextureRegion(texture));
     }*/
     //click event listener
+
     private ClickListener createClickListener(final int clickedNumber) {
         return new ClickListener() {
             @Override
@@ -264,6 +265,11 @@ public class GameScreenMain extends ScreenAdapter {
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
                     score +=1;
                     ++greenOnes;
+                    if (greenOnes % n == 0) {
+                        powerUpImage.setDrawable(alternatePowerUpDrawable);
+                    } else {
+                        powerUpImage.setDrawable(defaultPowerUpDrawable);
+                    }
                     soundCorrect.play();
                     if(isBingo()){
                         //System.out.println("Bingo");
@@ -279,6 +285,7 @@ public class GameScreenMain extends ScreenAdapter {
                         healthLabel.setText("health: " + health);
 
                 }
+
                 System.out.println("GG"+greenOnes);
             }
         };
@@ -384,7 +391,7 @@ public class GameScreenMain extends ScreenAdapter {
             }
         }
 
-        // Check main diagonal
+
         Label[] mainDiagonal = new Label[matrixLabelsPlayer2.length];
         for (int i = 0; i < matrixLabelsPlayer2.length; i++) {
             mainDiagonal[i] = matrixLabelsPlayer2[i][i];
@@ -501,10 +508,12 @@ public class GameScreenMain extends ScreenAdapter {
         powerUpImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //if(greenOnes % n == 0) {
+                System.out.println(greenOnes);
+                if(greenOnes % n == 0) {
                     applyPowerUp();
                     n += 5;
-                //}
+                    powerUpImage.setDrawable(defaultPowerUpDrawable);
+                }
             }
         });
 
@@ -565,33 +574,31 @@ public class GameScreenMain extends ScreenAdapter {
     }
 
     private void applyPowerUp() {
-        // Generate a random row and column
-        int randomRow = getRandomRow();
-        int randomCol = getRandomColumn();
+        int randomNonGreenIndex = getRandomNonGreenRowAndColumn();
+        int randomRow = randomNonGreenIndex / difficulty.getSize();
+        int randomCol = randomNonGreenIndex % difficulty.getSize();
 
-        // Change the color of the selected label to green
         matrixLabels[randomRow][randomCol].setStyle(skin.get("greenLabel", Label.LabelStyle.class));
-        if(matrixLabelsPlayer2 == null){
-            if(isBingo()){
+
+        if (matrixLabelsPlayer2 == null) {
+            if (isBingo()) {
                 //System.out.println("Bingo");
-                game.setScreen(new WinScreen(game,score,"player"));
+                game.setScreen(new WinScreen(game, score, "player"));
             }
-        }
-        else {
+        } else {
             if (isBingoAi()) {
                 //System.out.println("KOMP JE ZMAGo");
                 game.setScreen(new WinScreen(game, score, "ai"));
             }
-            if(isBingo()){
-                //System.out.println("Bingo");
-                game.setScreen(new WinScreen(game,score,"player"));
+            if (isBingo()) {
+                game.setScreen(new WinScreen(game, score, "player"));
             }
         }
-
-
-        // You can also add any additional logic for the power-up effect
     }
 
+    private boolean isGreen(int row, int column) {
+        return matrixLabels[row][column].getStyle().equals(skin.get("greenLabel", Label.LabelStyle.class));
+    }
     private int getRandomRow() {
         return new Random().nextInt(difficulty.getSize());
     }
@@ -599,6 +606,17 @@ public class GameScreenMain extends ScreenAdapter {
     private int getRandomColumn() {
         return new Random().nextInt(difficulty.getSize());
     }
+    private int getRandomNonGreenRowAndColumn() {
+        int row, column;
+
+        do {
+            row = getRandomRow();
+            column = getRandomColumn();
+        } while (isGreen(row, column));
+
+        return row * difficulty.getSize() + column;
+    }
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
