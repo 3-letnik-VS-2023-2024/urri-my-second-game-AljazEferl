@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -101,7 +103,6 @@ public class GameScreenMain extends ScreenAdapter {
     private void scheduleNumberDisplay() {
         numberDisplayTask = new Timer.Task() {
             private float initialDelay = 0f;
-
             private float intervalDecreaseRate = 0.1f;
             private float timeElapsed = 0f;
 
@@ -500,22 +501,40 @@ public class GameScreenMain extends ScreenAdapter {
         defaultPowerUpDrawable = new TextureRegionDrawable(defaultPowerUpRegion);
         powerUpImage = new Image(defaultPowerUpDrawable);
         powerUpImage.setSize(50, 50); // Set the size as needed
-        powerUpImage.setPosition(GameConfig.HUD_WIDTH / 2f - powerUpImage.getWidth() / 2f, GameConfig.HUD_HEIGHT - 85);
+        powerUpImage.setPosition(GameConfig.HUD_WIDTH / 2f - powerUpImage.getWidth() / 2f, GameConfig.HUD_HEIGHT - 65);
         alternatePowerUpRegion = gameplayAtlas.findRegion(RegionNames.HOT);
         alternatePowerUpDrawable = new TextureRegionDrawable(alternatePowerUpRegion);
+
 
 
         powerUpImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println(greenOnes);
-                if(greenOnes % n == 0) {
+                if (greenOnes % n == 0) {
                     applyPowerUp();
+
+                    powerUpImage.clearActions();
+
+                    Action fadeInOutAction = Actions.sequence(
+                            Actions.parallel(
+                                    Actions.fadeOut(0.5f),
+                                    Actions.scaleTo(1.3f, 1.3f, 0.5f)
+                            ),
+                            Actions.delay(1.0f),
+                            Actions.parallel(
+                                    Actions.fadeIn(0.5f),
+                                    Actions.scaleTo(1.0f, 1.0f, 0.5f)
+                            )
+                    );
+
+                    powerUpImage.addAction(fadeInOutAction);
+
                     n += 5;
                     powerUpImage.setDrawable(defaultPowerUpDrawable);
                 }
             }
         });
+
 
 
 
