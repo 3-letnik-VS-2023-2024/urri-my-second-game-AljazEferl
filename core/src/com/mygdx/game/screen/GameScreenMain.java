@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -81,12 +82,16 @@ public class GameScreenMain extends ScreenAdapter {
 
     private Timer.Task numberDisplayTask;
     private Image powerUpImage;
+    private Image numImage;
     private int greenOnes = 1;
     private TextureRegion defaultPowerUpRegion;
     private TextureRegion alternatePowerUpRegion;
+    private TextureRegion numberImage;
 
     private GameDifficulty difficulty = GameManager.INSTANCE.getInitMove();
     private TextureRegionDrawable defaultPowerUpDrawable;
+
+    private TextureRegionDrawable numberImgDrawable;
     private TextureRegionDrawable alternatePowerUpDrawable;
 
 
@@ -164,15 +169,15 @@ public class GameScreenMain extends ScreenAdapter {
 
                     int randomNumberPlayer2 = availableNumbers.remove(0);
                     matrixLabelsPlayer2[row][col] = new Label(String.valueOf(randomNumberPlayer2), skin,"black");//new Label.LabelStyle(skin.get("font", BitmapFont.class), Color.BLACK));
-                    matrixTablePlayer2.add(matrixLabelsPlayer2[row][col]).pad(10);
+                    matrixTablePlayer2.add(matrixLabelsPlayer2[row][col]).pad(5);
                 }
 
                 matrixTable.row();
                 matrixTablePlayer2.row();
             }
 
-            mainTable.add(matrixTable).pad(20);
-            mainTable.add(matrixTablePlayer2).pad(20);
+            mainTable.add(matrixTable).pad(10);
+            mainTable.add(matrixTablePlayer2).pad(10);
 
         } else {
             matrixLabels = new Label[difficulty.getSize()][difficulty.getSize()];
@@ -262,8 +267,11 @@ public class GameScreenMain extends ScreenAdapter {
                     greenCheck.setPosition(labelX+ greenCheck.getImageWidth()*5, labelY);
                     gameplayStage.addActor(greenCheck);*/
 
+                    //numberLabel
+
                     soundCorrect.play();
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
+
                     score +=1;
                     ++greenOnes;
                     if (greenOnes % n == 0) {
@@ -283,7 +291,7 @@ public class GameScreenMain extends ScreenAdapter {
                         if (health <= 0){
                             game.setScreen(new GameOver(game,selectedCity,score));
                         }
-                        healthLabel.setText("health: " + health);
+                        //healthLabel.setText(": " + health);
 
                 }
 
@@ -429,24 +437,39 @@ public class GameScreenMain extends ScreenAdapter {
         return true;
     }
 
-
+    private Array<Integer> displayedNumbers = new Array<>();
     private void displayNextNumber() {
+
         if (currentNumberIndex < tombolaNumbers.size()) {
             int number = tombolaNumbers.get(currentNumberIndex);
             System.out.println("Displaying Number: " + number);
-            if (numberLabel == null) {
-                numberLabel = new Label("", skin,"big");
 
+            if (numberLabel == null) {
+                numberLabel = new Label("", skin, "big");
 
                 hudTable = new Table();
-                hudTable.top().left();
+                hudTable.top().left();  // Ensure top-left alignment
                 hudTable.setFillParent(true);
-                hudTable.add(numberLabel).padTop(20).padLeft(20);
+                hudTable.add(numberLabel).padTop(20).padLeft(20);  // Add padding as needed
 
                 hudStage.addActor(hudTable);
             }
 
             numberLabel.setText(String.valueOf(number));
+            displayedNumbers.add(number);
+
+            // Ensure only the last 5 numbers are displayed in the column
+            hudTable.clear();  // Clear all previous labels
+            for (int i = Math.max(0, displayedNumbers.size - 5); i < displayedNumbers.size; i++) {
+                Label historyLabel = new Label(String.valueOf(displayedNumbers.get(i)), skin, "big");
+
+                // Create a container for the label and set the background
+                Container<Label> container = new Container<>(historyLabel);
+                container.background(getNumberBackground(displayedNumbers.get(i)));
+
+                hudTable.add(container).padTop(10).padLeft(10);  // Adjust padding as needed
+                hudTable.row();  // Move to the next row for the next number
+            }
             if (difficulty == GameDifficulty.EXTREME) {
                 for (int row = 0; row < difficulty.getSize(); row++) {
                     for (int col = 0; col < difficulty.getSize(); col++) {
@@ -457,17 +480,26 @@ public class GameScreenMain extends ScreenAdapter {
                     }
                 }
 
-                if(isBingoAi()){
-                    //System.out.println("KOMP JE ZMAGo");
-                    game.setScreen(new WinScreen(game,score,"ai"));
+                if (isBingoAi()) {
+                    // System.out.println("KOMP JE ZMAGo");
+                    game.setScreen(new WinScreen(game, score, "ai"));
                 }
-
             }
 
             currentNumberIndex++;
         } else {
-
             currentNumberIndex = 0;
+        }
+    }
+
+
+    private Drawable getNumberBackground(int number) {
+        if (displayedNumbers.size > 0 && number == displayedNumbers.get(displayedNumbers.size - 1)) {
+            // Return the background for the last displayed number
+            return new TextureRegionDrawable(gameplayAtlas.findRegion(RegionNames.DIFFERENT_BALL));
+        } else {
+            // Return the default background for other numbers
+            return new TextureRegionDrawable(gameplayAtlas.findRegion(RegionNames.BALL));
         }
     }
     private ArrayList<Integer> randomNumbers() {
@@ -505,6 +537,12 @@ public class GameScreenMain extends ScreenAdapter {
         alternatePowerUpRegion = gameplayAtlas.findRegion(RegionNames.HOT);
         alternatePowerUpDrawable = new TextureRegionDrawable(alternatePowerUpRegion);
 
+
+       // numberImage = gameplayAtlas.findRegion(RegionNames.GREY);
+       // numberImgDrawable = new TextureRegionDrawable(numberImage);
+       // numImage = new Image(numberImgDrawable);
+        //numImage.setSize(90,90);
+       // numImage.setPosition(10,GameConfig.HUD_HEIGHT - 100 );
 
 
         powerUpImage.addListener(new ClickListener() {
@@ -582,12 +620,13 @@ public class GameScreenMain extends ScreenAdapter {
         healthTable.setFillParent(true);
 
 
-        healthLabel = new Label("health: "+ health , skin, "big");
+        healthLabel = new Label("", skin, "big");
         healthTable.setPosition(GameConfig.HUD_WIDTH-healthLabel.getWidth()-40,0);
         healthTable.add(healthLabel).padTop(20).padRight(20);
         hudStage.addActor(healthTable);
         hudStage.addActor(backButton);
         hudStage.addActor(powerUpImage);
+       // hudStage.addActor(numImage);
 
        Gdx.input.setInputProcessor(new InputMultiplexer(hudStage, gameplayStage));
     }

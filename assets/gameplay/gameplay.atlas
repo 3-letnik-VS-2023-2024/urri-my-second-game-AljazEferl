@@ -11,6 +11,20 @@ background2
   orig: 981, 328
   offset: 0, 0
   index: -1
+ball2D
+  rotate: false
+  xy: 876, 190
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+bingoBall
+  rotate: false
+  xy: 876, 124
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 lightPink
   rotate: false
   xy: 685, 479

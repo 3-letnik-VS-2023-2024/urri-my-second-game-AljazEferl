@@ -58,7 +58,7 @@ public class MenuScreen extends ScreenAdapter {
         }
         else {
             musicOg.stop();
-        }
+       }
 
         stage.addActor(createUi());
         Gdx.input.setInputProcessor(stage);

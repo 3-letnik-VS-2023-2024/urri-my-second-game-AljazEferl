@@ -14,6 +14,8 @@ public class GameManager {
     private static final String INIT_MOVE_KEY = "difficulty";
     private static final String MUSIC_ENABLED_KEY = "musicEnabled";
 
+    private static String SOUND_ENABLED = "soundEnabled";
+
     private final Preferences PREFS;
     private GameDifficulty initMove = GameDifficulty.EASY;
     private boolean musicEnabled = true;

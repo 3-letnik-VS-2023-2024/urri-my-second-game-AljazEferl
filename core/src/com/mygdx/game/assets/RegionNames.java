@@ -34,6 +34,9 @@ public class RegionNames {
 
     public static final String HOT = "hot";
 
+    public static final String BALL = "bingoBall";
+    public static final String DIFFERENT_BALL = "ball2D";
+
 
 
 

@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 
-public class AssetPacker {
+public class   AssetPacker {
 
     private static final boolean DRAW_DEBUG_OUTLINE = false;
 

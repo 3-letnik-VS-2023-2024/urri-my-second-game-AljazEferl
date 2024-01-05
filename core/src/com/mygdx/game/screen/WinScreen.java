@@ -94,7 +94,7 @@ public class WinScreen extends ScreenAdapter {
         if(aiOrplayer == "player"){
             savePlayerScore(new PlayerData("Nino", score));
             gameOverLabel.setText("YOU HAVE WON");
-            background = gameplayAtlas.findRegion(RegionNames.BEIGE);
+            background = gameplayAtlas.findRegion(RegionNames.GREY);
             table.setBackground(new TextureRegionDrawable(background));
         }
 
