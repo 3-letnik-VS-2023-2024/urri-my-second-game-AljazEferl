@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -86,6 +87,8 @@ public class GameScreenMain extends ScreenAdapter {
     private int greenOnes = 1;
     private TextureRegion defaultPowerUpRegion;
     private TextureRegion alternatePowerUpRegion;
+
+    private TextureRegion bomb;
     private TextureRegion numberImage;
 
     private GameDifficulty difficulty = GameManager.INSTANCE.getInitMove();
@@ -93,7 +96,7 @@ public class GameScreenMain extends ScreenAdapter {
 
     private TextureRegionDrawable numberImgDrawable;
     private TextureRegionDrawable alternatePowerUpDrawable;
-
+    private int lastClickedNumber = -1;
 
     public GameScreenMain(BingoBlitz game, String selectedCity) {
         this.game = game;
@@ -257,6 +260,7 @@ public class GameScreenMain extends ScreenAdapter {
                 int displayedNumber = Integer.parseInt(numberLabel.getText().toString());
 
                 if (clickedNumber == displayedNumber) {
+                    lastClickedNumber = clickedNumber;
                    /* TextureRegion greenCheckRegion = gameplayAtlas.findRegion(RegionNames.GREY);
                     Image greenCheck = new Image(new TextureRegionDrawable(greenCheckRegion));
                     float imageSize = 50f;
@@ -268,8 +272,20 @@ public class GameScreenMain extends ScreenAdapter {
                     gameplayStage.addActor(greenCheck);*/
 
                     //numberLabel
+                    System.out.println("ANIMACIJA");
+                    numberLabel.addAction(Actions.sequence(
+                            Actions.fadeOut(0.5f),
+                            Actions.run(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Update the numberLabel text and fade it back in
+                                    numberLabel.setText(String.valueOf(0));
+                                    numberLabel.addAction(Actions.fadeIn(0.5f));
+                                }
+                            })
+                    ));
 
-                    soundCorrect.play();
+                soundCorrect.play();
                     matrixLabels[getClickedRow(event)][getClickedColumn(event)].setStyle(skin.get("greenLabel", Label.LabelStyle.class));//new Label.LabelStyle(smallFont, Color.GREEN));
 
                     score +=1;
@@ -331,7 +347,111 @@ public class GameScreenMain extends ScreenAdapter {
 
         return col;
     }
+    private int bombCount = 0;
 
+    private int bonusClickCount = 0;
+    private static final int REQUIRED_CLICKS = 5;
+
+    private void spawnBonusElement() {
+        TextureRegion bonusRegion = gameplayAtlas.findRegion(RegionNames.WARNING);
+
+        final Image bonusImage = new Image(bonusRegion);
+        float bonusImageX = (GameConfig.WORLD_WIDTH - bonusImage.getWidth()) / 2f;
+        float bonusImageY = (GameConfig.WORLD_HEIGHT - bonusImage.getHeight()) / 2f;
+
+        bonusImage.setPosition(bonusImageX, bonusImageY);
+
+        bonusImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                handleBonusElementClick(bonusImage);
+            }
+        });
+
+        gameplayStage.addActor(bonusImage);
+    }
+
+
+   // private int bonusCount = 0;
+    private void handleBonusElementClick(Image bonusImage) {
+        bonusClickCount++;
+
+        if (bonusClickCount >= REQUIRED_CLICKS) {
+            bonusImage.remove();
+            bonusClickCount = 0;
+           // bonusCount++;
+            removeBombs();
+        }
+    }
+
+
+    private boolean shouldSpawnBonus  =true;
+    private void removeBombs() {
+        bombCount = 0;
+        for (Image bombImage : bombImages) {
+            bombImage.remove();
+        }
+        bombImages.clear();
+        shouldSpawnBonus = true;
+    }
+
+    private Array<Image> bombImages = new Array<>();
+
+    private void spawnBomb() {
+        bombCount++;
+        TextureRegion bombRegion = gameplayAtlas.findRegion(RegionNames.BOMB);
+        float randomX = MathUtils.random(0, GameConfig.WORLD_WIDTH - bombRegion.getRegionWidth());
+        float randomY = MathUtils.random(0, GameConfig.WORLD_HEIGHT - bombRegion.getRegionHeight());
+
+        final Image bombImage = new Image(bombRegion);
+        bombImage.setPosition(randomX, randomY);
+        if(bombCount > 5 && shouldSpawnBonus){
+            //if(bonusCount >= 2) {
+                spawnBonusElement();
+                shouldSpawnBonus = false;
+          //  }
+           // else {
+
+           //     game.setScreen(new GameOver(game,selectedCity,score));
+            //}
+
+        }
+        bombImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                handleBombClick(bombImage);
+            }
+        });
+
+        gameplayStage.addActor(bombImage);
+
+        bombImages.add(bombImage);
+    }
+
+
+    private void handleBombClick(final Image bombImage) {
+        bombImage.clearActions(); // Clear existing actions to avoid conflicts
+        bombCount--;
+        // Define the loop action
+        Action loopAction = Actions.sequence(
+                Actions.moveTo(0, 0, 2f),  // Move to the bottom-left corner
+                Actions.moveTo(GameConfig.WORLD_WIDTH - bombImage.getWidth(), 0, 2f),  // Move to the top-right corner
+                Actions.moveTo(GameConfig.WORLD_WIDTH - bombImage.getWidth(), GameConfig.WORLD_HEIGHT - bombImage.getHeight(), 2f),  // Move to the bottom-right corner
+                Actions.moveTo(0, GameConfig.WORLD_HEIGHT - bombImage.getHeight(), 2f),  // Move to the top-left corner
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        // After completing the loop, remove the bomb image
+                        bombImage.remove();
+
+
+
+                    }
+                })
+        );
+
+        bombImage.addAction(Actions.forever(loopAction));
+    }
 
     private boolean isBingo() {
         // Check rows
@@ -439,7 +559,6 @@ public class GameScreenMain extends ScreenAdapter {
 
     private Array<Integer> displayedNumbers = new Array<>();
     private void displayNextNumber() {
-
         if (currentNumberIndex < tombolaNumbers.size()) {
             int number = tombolaNumbers.get(currentNumberIndex);
             System.out.println("Displaying Number: " + number);
@@ -455,11 +574,13 @@ public class GameScreenMain extends ScreenAdapter {
                 hudStage.addActor(hudTable);
             }
 
-            numberLabel.setText(String.valueOf(number));
             displayedNumbers.add(number);
+            
 
-            // Ensure only the last 5 numbers are displayed in the column
-            hudTable.clear();  // Clear all previous labels
+            numberLabel.setText(String.valueOf(number));
+
+
+            hudTable.clear();
             for (int i = Math.max(0, displayedNumbers.size - 5); i < displayedNumbers.size; i++) {
                 Label historyLabel = new Label(String.valueOf(displayedNumbers.get(i)), skin, "big");
 
@@ -470,6 +591,7 @@ public class GameScreenMain extends ScreenAdapter {
                 hudTable.add(container).padTop(10).padLeft(10);  // Adjust padding as needed
                 hudTable.row();  // Move to the next row for the next number
             }
+
             if (difficulty == GameDifficulty.EXTREME) {
                 for (int row = 0; row < difficulty.getSize(); row++) {
                     for (int col = 0; col < difficulty.getSize(); col++) {
@@ -481,7 +603,6 @@ public class GameScreenMain extends ScreenAdapter {
                 }
 
                 if (isBingoAi()) {
-                    // System.out.println("KOMP JE ZMAGo");
                     game.setScreen(new WinScreen(game, score, "ai"));
                 }
             }
@@ -513,6 +634,8 @@ public class GameScreenMain extends ScreenAdapter {
     }
     private int n = 5;
 
+
+
     @Override
     public void show() {
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
@@ -536,9 +659,17 @@ public class GameScreenMain extends ScreenAdapter {
         powerUpImage.setPosition(GameConfig.HUD_WIDTH / 2f - powerUpImage.getWidth() / 2f, GameConfig.HUD_HEIGHT - 65);
         alternatePowerUpRegion = gameplayAtlas.findRegion(RegionNames.HOT);
         alternatePowerUpDrawable = new TextureRegionDrawable(alternatePowerUpRegion);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                System.out.println(bombCount);
+                if (bombCount <= 5) {
+                    spawnBomb();
+                }
+            }
+        }, 3f, 3f);
 
-
-       // numberImage = gameplayAtlas.findRegion(RegionNames.GREY);
+        // numberImage = gameplayAtlas.findRegion(RegionNames.GREY);
        // numberImgDrawable = new TextureRegionDrawable(numberImage);
        // numImage = new Image(numberImgDrawable);
         //numImage.setSize(90,90);

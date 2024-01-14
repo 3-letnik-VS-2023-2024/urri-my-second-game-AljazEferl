@@ -6,51 +6,58 @@ filter: Nearest, Nearest
 repeat: none
 background2
   rotate: false
-  xy: 2, 681
+  xy: 2, 685
   size: 981, 328
   orig: 981, 328
   offset: 0, 0
   index: -1
 ball2D
   rotate: false
-  xy: 876, 190
+  xy: 898, 159
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 bingoBall
   rotate: false
-  xy: 876, 124
+  xy: 898, 93
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+bomb
+  rotate: false
+  xy: 985, 981
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 lightPink
   rotate: false
-  xy: 685, 479
+  xy: 685, 225
   size: 214, 200
   orig: 214, 200
   offset: 0, 0
   index: -1
 map1
   rotate: false
-  xy: 2, 2
+  xy: 2, 6
   size: 681, 677
   orig: 681, 677
   offset: 0, 0
   index: -1
-oLetter
-  rotate: false
-  xy: 685, 39
-  size: 189, 215
-  orig: 189, 215
-  offset: 0, 0
-  index: -1
 red
   rotate: false
-  xy: 685, 256
+  xy: 685, 2
   size: 211, 221
   orig: 211, 221
+  offset: 0, 0
+  index: -1
+warning
+  rotate: false
+  xy: 685, 427
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 
@@ -59,6 +66,20 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+bLetter
+  rotate: false
+  xy: 397, 587
+  size: 206, 210
+  orig: 206, 210
+  offset: 0, 0
+  index: -1
+background1
+  rotate: false
+  xy: 193, 305
+  size: 785, 277
+  orig: 785, 277
+  offset: 0, 0
+  index: -1
 background3
   rotate: false
   xy: 2, 2
@@ -66,18 +87,74 @@ background3
   orig: 785, 301
   offset: 0, 0
   index: -1
+dBlue
+  rotate: false
+  xy: 210, 800
+  size: 201, 198
+  orig: 201, 198
+  offset: 0, 0
+  index: -1
 dPink
   rotate: false
-  xy: 789, 92
+  xy: 605, 585
   size: 210, 211
   orig: 210, 211
   offset: 0, 0
   index: -1
-gameover
+gLetter
   rotate: false
-  xy: 2, 305
-  size: 883, 668
-  orig: 883, 668
+  xy: 603, 799
+  size: 200, 199
+  orig: 200, 199
+  offset: 0, 0
+  index: -1
+green
+  rotate: false
+  xy: 2, 602
+  size: 198, 203
+  orig: 198, 203
+  offset: 0, 0
+  index: -1
+iLetter
+  rotate: false
+  xy: 413, 800
+  size: 188, 198
+  orig: 188, 198
+  offset: 0, 0
+  index: -1
+lightBlue
+  rotate: false
+  xy: 805, 798
+  size: 197, 200
+  orig: 197, 200
+  offset: 0, 0
+  index: -1
+nLetter
+  rotate: false
+  xy: 202, 590
+  size: 193, 208
+  orig: 193, 208
+  offset: 0, 0
+  index: -1
+oLetter
+  rotate: false
+  xy: 2, 385
+  size: 189, 215
+  orig: 189, 215
+  offset: 0, 0
+  index: -1
+pinkREd
+  rotate: false
+  xy: 817, 584
+  size: 197, 212
+  orig: 197, 212
+  offset: 0, 0
+  index: -1
+yellow
+  rotate: false
+  xy: 2, 807
+  size: 206, 191
+  orig: 206, 191
   offset: 0, 0
   index: -1
 
@@ -86,32 +163,18 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-bLetter
-  rotate: false
-  xy: 639, 195
-  size: 206, 210
-  orig: 206, 210
-  offset: 0, 0
-  index: -1
 bingoBlitz
   rotate: false
-  xy: 2, 12
+  xy: 2, 2
   size: 635, 393
   orig: 635, 393
   offset: 0, 0
   index: -1
 newyork
   rotate: false
-  xy: 2, 407
+  xy: 2, 397
   size: 918, 615
   orig: 918, 615
-  offset: 0, 0
-  index: -1
-yellow
-  rotate: false
-  xy: 639, 2
-  size: 206, 191
-  orig: 206, 191
   offset: 0, 0
   index: -1
 
@@ -120,84 +183,15 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-background1
+gameover
   rotate: false
   xy: 2, 2
-  size: 785, 277
-  orig: 785, 277
-  offset: 0, 0
-  index: -1
-background4
-  rotate: false
-  xy: 2, 281
-  size: 843, 667
-  orig: 843, 667
-  offset: 0, 0
-  index: -1
-pinkREd
-  rotate: false
-  xy: 789, 67
-  size: 197, 212
-  orig: 197, 212
+  size: 883, 668
+  orig: 883, 668
   offset: 0, 0
   index: -1
 
 gameplay5.png
-size: 1024, 1024
-format: RGBA8888
-filter: Nearest, Nearest
-repeat: none
-dBlue
-  rotate: false
-  xy: 202, 7
-  size: 201, 198
-  orig: 201, 198
-  offset: 0, 0
-  index: -1
-gLetter
-  rotate: false
-  xy: 405, 6
-  size: 200, 199
-  orig: 200, 199
-  offset: 0, 0
-  index: -1
-green
-  rotate: false
-  xy: 2, 2
-  size: 198, 203
-  orig: 198, 203
-  offset: 0, 0
-  index: -1
-iLetter
-  rotate: false
-  xy: 823, 454
-  size: 188, 198
-  orig: 188, 198
-  offset: 0, 0
-  index: -1
-lightBlue
-  rotate: false
-  xy: 607, 5
-  size: 197, 200
-  orig: 197, 200
-  offset: 0, 0
-  index: -1
-madrid
-  rotate: false
-  xy: 2, 207
-  size: 819, 655
-  orig: 819, 655
-  offset: 0, 0
-  index: -1
-nLetter
-  rotate: false
-  xy: 823, 654
-  size: 193, 208
-  orig: 193, 208
-  offset: 0, 0
-  index: -1
-
-gameplay6.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
@@ -217,7 +211,33 @@ grey
   offset: 0, 0
   index: -1
 
+gameplay6.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+background4
+  rotate: false
+  xy: 2, 2
+  size: 843, 667
+  orig: 843, 667
+  offset: 0, 0
+  index: -1
+
 gameplay7.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+madrid
+  rotate: false
+  xy: 2, 2
+  size: 819, 655
+  orig: 819, 655
+  offset: 0, 0
+  index: -1
+
+gameplay8.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
@@ -230,7 +250,7 @@ pariz
   offset: 0, 0
   index: -1
 
-gameplay8.png
+gameplay9.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
@@ -243,7 +263,7 @@ beige
   offset: 0, 0
   index: -1
 
-gameplay9.png
+gameplay10.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
@@ -256,7 +276,7 @@ map
   offset: 0, 0
   index: -1
 
-gameplay10.png
+gameplay11.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
@@ -269,7 +289,7 @@ cold
   offset: 0, 0
   index: -1
 
-gameplay11.png
+gameplay12.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest

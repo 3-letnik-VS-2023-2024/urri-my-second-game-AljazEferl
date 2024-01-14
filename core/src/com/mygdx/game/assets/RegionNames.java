@@ -36,7 +36,8 @@ public class RegionNames {
 
     public static final String BALL = "bingoBall";
     public static final String DIFFERENT_BALL = "ball2D";
-
+    public static final String BOMB = "bomb";
+    public static final String WARNING = "warning";
 
 
 
